@@ -1,0 +1,32 @@
+cmake_minimum_required(VERSION 3.10)
+
+project(QtFishTank)
+
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+set(CMAKE_PREFIX_PATH "D:\\Qt\\6.8.2\\mingw_64\\lib\\cmake")
+find_package(Qt6 COMPONENTS Core Gui Widgets Network OpenGL REQUIRED)
+
+include_directories(${CMAKE_SOURCE_DIR}/include)
+include_directories(${Qt6Widgets_INCLUDE_DIRS})
+include_directories(${Qt6OpenGL_INCLUDE_DIRS})
+
+add_executable(QtFishTank src/main.cpp 
+src/core/GLWidget.cpp src/core/MainWindow.cpp
+src/fluid/FluidSimulator.cpp
+src/input/UserInputHandler.cpp
+src/renderer/Renderer.cpp 
+src/objects/Ball.cpp src/objects/Fish.cpp
+)
+
+target_link_libraries(QtFishTank
+    Qt6::Core
+    Qt6::Widgets
+    Qt6::Network
+)
+
+set_target_properties(QtFishTank PROPERTIES
+    AUTOMOC ON
+)

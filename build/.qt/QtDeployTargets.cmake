@@ -1,0 +1,2 @@
+set(__QT_DEPLOY_TARGET_QtFishTank_FILE /home/jingrenbai/CLionProjects/QtFishTank/build/QtFishTank)
+set(__QT_DEPLOY_TARGET_QtFishTank_TYPE EXECUTABLE)

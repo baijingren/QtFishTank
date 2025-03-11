@@ -1,0 +1,78 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "QtFishTank",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "QtFishTank::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-QtFishTank-Debug-11ba878e0ddbf945f908.json",
+					"name" : "QtFishTank",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "QtFishTank_autogen::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-QtFishTank_autogen-Debug-60f643200c675c361e91.json",
+					"name" : "QtFishTank_autogen",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "QtFishTank_autogen_timestamp_deps::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-QtFishTank_autogen_timestamp_deps-Debug-4a569b240a2fd0b96f79.json",
+					"name" : "QtFishTank_autogen_timestamp_deps",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/jingrenbai/CLionProjects/QtFishTank/build",
+		"source" : "/home/jingrenbai/CLionProjects/QtFishTank"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 7
+	}
+}
