@@ -1,5 +1,0 @@
-/home/jingrenbai/CLionProjects/QtFishTank/build/CMakeFiles/QtFishTank.dir
-/home/jingrenbai/CLionProjects/QtFishTank/build/CMakeFiles/edit_cache.dir
-/home/jingrenbai/CLionProjects/QtFishTank/build/CMakeFiles/rebuild_cache.dir
-/home/jingrenbai/CLionProjects/QtFishTank/build/CMakeFiles/QtFishTank_autogen_timestamp_deps.dir
-/home/jingrenbai/CLionProjects/QtFishTank/build/CMakeFiles/QtFishTank_autogen.dir
