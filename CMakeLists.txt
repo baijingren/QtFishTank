@@ -19,6 +19,8 @@ src/fluid/FluidSimulator.cpp
 src/input/UserInputHandler.cpp
 src/renderer/Renderer.cpp 
 src/objects/Ball.cpp src/objects/Fish.cpp
+        src/fluid/Particle.cpp
+        src/fluid/Particle.h
 )
 
 target_link_libraries(QtFishTank
