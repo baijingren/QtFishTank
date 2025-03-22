@@ -21,6 +21,16 @@ src/renderer/Renderer.cpp
 src/objects/Ball.cpp src/objects/Fish.cpp
         src/fluid/Particle.cpp
         src/fluid/Particle.h
+        src/renderer/Camera.cpp
+        src/renderer/Camera.h
+        src/DataType/Vec3.cpp
+        src/DataType/Vec3.h
+        src/DataType/Vec3f.cpp
+        src/DataType/Vec3f.h
+        src/DataType/Vec4f.cpp
+        src/DataType/Vec4f.h
+        src/DataType/Vec4.cpp
+        src/DataType/Vec4.h
 )
 
 target_link_libraries(QtFishTank
