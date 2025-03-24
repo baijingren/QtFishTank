@@ -17,9 +17,7 @@ void Simulator::update() {    // 在这里不写 while-loop，因为渲染不在
          * 4.粒子粘滞系数带来的受力
          */
 	for (auto& p: particles) {// 用上一帧计算得到的加速度更新这一帧的速度
-		p.vel[0] += gravity[0] * dt;
-		p.vel[1] += gravity[1] * dt;
-		p.vel[2] += gravity[2] * dt;
+		p.vel += gravity * dt;
 		// TODO: pridict position x_i* \leftarrow x_i + \Delta t v_i
 	}
 	std::vector<Particle>* neighbourParticles;

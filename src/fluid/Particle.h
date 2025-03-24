@@ -5,12 +5,12 @@
 #ifndef PARTICLE_H
 #define PARTICLE_H
 
-
+#include "DataType/Vec.h"
 
 class Particle {
 public:
-    float pos[3]; // 粒子位置
-    float vel[3]; // 粒子速度
+    Vec3f pos; // 粒子位置
+    Vec3f vel; // 粒子速度
     float density; // 粒子密度（使用sph方法）
 };
 
