@@ -5,12 +5,12 @@
 #ifndef PARTICLE_H
 #define PARTICLE_H
 
-#include "DataType/Vec.h"
+#include <glm/glm.hpp>
 
 class Particle {
 public:
-    Vec3f pos; // 粒子位置
-    Vec3f vel; // 粒子速度
+    glm::vec3 pos; // 粒子位置
+    glm::vec3 vel; // 粒子速度
     float density; // 粒子密度（使用sph方法）
 };
 
