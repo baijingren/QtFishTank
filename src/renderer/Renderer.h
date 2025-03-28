@@ -11,6 +11,7 @@ private:
 	float screenToWorldRatio = 10.0;
 	Camera camera;
 public:
+
 };
 
 #endif
