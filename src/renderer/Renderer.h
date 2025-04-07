@@ -2,16 +2,25 @@
 #define RENDERER_H
 
 #include "Camera.h"
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+#include <QtOpenGLWidgets/QOpenGLWidget>
+#include <QOpenGLFunctions>
 
-class Renderer{
+class Renderer: public QOpenGLWidget, protected QOpenGLFunctions{
+	Q_OBJECT
 private:
 	int screen_x = 800, screen_y = 600;
 	float screenToWorldRatio = 10.0;
 	Camera camera;
 public:
-
+protected:
+	void initializeGL() override;
+	void resizeGL(int w, int h) override;
+	void paintGL() override;
+	void drawScene();
+	static void drawFish();
+	static void drawBall();
+	static void drawFluid();
 };
 
 #endif

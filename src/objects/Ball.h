@@ -20,6 +20,7 @@ public:
 	void setPosition(glm::vec3 m_position);
 	void setColor(glm::vec4 m_color);
 	void setTexturePath(const std::string& m_texturePath);
+	glm::vec3 getNormalVector(glm::vec3  &normal, glm::vec3 &point);
 };
 
 #endif

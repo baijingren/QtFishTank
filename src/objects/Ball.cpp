@@ -35,3 +35,7 @@ std::string Ball::getTexturePath() {
 void Ball::setTexturePath(const std::string &m_texturePath) {
 	texturePath = m_texturePath;
 }
+
+glm::vec3 Ball::getNormalVector(glm::vec3 &normal, glm::vec3 &point) {
+	return glm::normalize(point - position);
+}

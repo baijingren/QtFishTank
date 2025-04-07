@@ -4,9 +4,6 @@
 
 #ifndef QTFISHTANK_CAMERA_H
 #define QTFISHTANK_CAMERA_H
-
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
 class Camera {
@@ -24,7 +21,17 @@ public:
 	glm::mat4 getProjectionMatrix();
 	void setProjectionMatrix(float fov, float aspect, float near, float far); // 透视投影
 	void setViewMatrix(glm::vec3 m_camPos, glm::vec3 m_cameraTarget, glm::vec3 m_cameraUp); // 设置视图矩阵
+	const glm::vec3 &getCamPos() const;
 
+	void setCamPos(const glm::vec3 &camPos);
+
+	const glm::vec3 &getCameraTarget() const;
+
+	void setCameraTarget(const glm::vec3 &cameraTarget);
+
+	const glm::vec3 &getCameraUp() const;
+
+	void setCameraUp(const glm::vec3 &cameraUp);
 };
 void debug(glm::mat4 ret);
 

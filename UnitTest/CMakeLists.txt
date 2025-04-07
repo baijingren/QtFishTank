@@ -1,9 +1,12 @@
 cmake_minimum_required(VERSION 3.10)
-add_executable(UnitTest CameraTest.cpp
-        ../src/renderer/Camera.cpp
+#add_executable(CameraTest CameraTest.cpp
+#        ../src/renderer/Camera.cpp
+#)
+add_executable(LoggerTest LoggerTest.cpp
+        ../src/Log.cpp
 )
 target_link_libraries(
-    UnitTest
+    LoggerTest
     Qt6::Test
 )
 

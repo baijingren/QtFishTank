@@ -1,11 +1,10 @@
-#ifndef MAIN_CONTROLLER_H
-#define MAIN_CONTROLLER_H
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
+#include <QMainWindow>
 
-namespace Core
-{
-    class MainController
-    {
-    };
+class MainWindow: public QMainWindow{
+public:
+
 };
 
 #endif

@@ -105,3 +105,27 @@ void Camera::setViewMatrix(glm::vec3 m_camPos, glm::vec3 m_cameraTarget, glm::ve
 //	));
 	viewMatrix = ret;
 }
+
+const glm::vec3 &Camera::getCamPos() const {
+	return camPos;
+}
+
+void Camera::setCamPos(const glm::vec3 &camPos) {
+	Camera::camPos = camPos;
+}
+
+const glm::vec3 &Camera::getCameraTarget() const {
+	return cameraTarget;
+}
+
+void Camera::setCameraTarget(const glm::vec3 &cameraTarget) {
+	Camera::cameraTarget = cameraTarget;
+}
+
+const glm::vec3 &Camera::getCameraUp() const {
+	return cameraUp;
+}
+
+void Camera::setCameraUp(const glm::vec3 &cameraUp) {
+	Camera::cameraUp = cameraUp;
+}

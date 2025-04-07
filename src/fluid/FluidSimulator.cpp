@@ -36,3 +36,6 @@ void Simulator::runPBF() {
 	}
 	epilogue();
 }
+float Simulator::poly6Value(glm::vec3 s, float h) {
+
+}

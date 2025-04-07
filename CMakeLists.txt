@@ -14,8 +14,8 @@ if (NOT GLFW_LIBRARY OR NOT GLFW_INCLUDE_DIR)
     message(FATAL_ERROR "GLFW not found!")
 endif()
 
-set(CMAKE_PREFIX_PATH "D:\\Qt\\6.8.2\\mingw_64\\lib\\cmake")
-find_package(Qt6 COMPONENTS Core Gui Widgets Network Test REQUIRED)
+#set(CMAKE_PREFIX_PATH "D:\\Qt\\6.8.2\\mingw_64\\lib\\cmake")
+find_package(Qt6 COMPONENTS Core Gui Widgets Network Test OpenGL OpenGLWidgets REQUIRED)
 find_package(OpenGL REQUIRED)
 find_package(glm REQUIRED)
 find_package(GLEW REQUIRED)
@@ -39,6 +39,9 @@ add_executable(QtFishTank src/main.cpp
         src/renderer/Camera.h
         src/renderer/Ray.cpp
         src/renderer/Ray.h
+        src/renderer/screen.cpp
+        src/renderer/screen.h
+        src/Log.cpp
 )
 
 enable_testing()
@@ -47,10 +50,14 @@ add_subdirectory(UnitTest)
 target_link_libraries(QtFishTank
     Qt6::Core
     Qt6::Widgets
+    Qt6::OpenGL
+    Qt6::OpenGLWidgets
     Qt6::Network
     Qt6::Test
+    Qt6::Gui
     ${GLFW_LIBRARY}
     GLEW::GLEW
+    OpenGL::GL
 )
 
 set_target_properties(QtFishTank PROPERTIES

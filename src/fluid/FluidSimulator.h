@@ -14,7 +14,7 @@ public:
 	void runPBF(); // 执行PBF算法
 	void prologue();
 	void epilogue();
-	void poly6Value(); // 计算核函数
+	float poly6Value(glm::vec3, float h); // 计算核函数
     const std::vector<Particle>& getParticles(); // 获得粒子对象
     ~Simulator(); // 销毁
 private:
