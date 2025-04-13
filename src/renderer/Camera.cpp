@@ -107,7 +107,7 @@ void Camera::setViewMatrix(glm::vec3 m_camPos, glm::vec3 m_cameraTarget, glm::ve
 }
 
 const glm::vec3 &Camera::getCamPos() const {
-	return camPos;
+
 }
 
 void Camera::setCamPos(const glm::vec3 &camPos) {

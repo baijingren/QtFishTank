@@ -10,7 +10,7 @@ import taichi as ti
 ti.init(arch=ti.gpu)
 
 screen_res = (800, 400)
-screen_to_world_ratio = 5.0
+screen_to_world_ratio = 10.0
 boundary = (
     screen_res[0] / screen_to_world_ratio,
     screen_res[1] / screen_to_world_ratio,
@@ -25,7 +25,7 @@ def round_up(f, s):
 
 grid_size = (round_up(boundary[0], 1), round_up(boundary[1], 1))
 
-dim = 2
+dim = 3
 bg_color = 0x112F41
 particle_color = 0x068587
 boundary_color = 0xEBACA2
@@ -83,8 +83,6 @@ def poly6_value(s, h):
         x = (h * h - s * s) / (h * h * h)
         result = poly6_factor * x * x * x
     return result
-
-
 @ti.func
 def spiky_gradient(r, h):
     result = ti.Vector([0.0, 0.0])
@@ -94,8 +92,6 @@ def spiky_gradient(r, h):
         g_factor = spiky_grad_factor * x * x
         result = r * g_factor / r_len
     return result
-
-
 @ti.func
 def compute_scorr(pos_ji):
     # Eq (13)
@@ -104,19 +100,13 @@ def compute_scorr(pos_ji):
     x = x * x
     x = x * x
     return (-corrK) * x
-
-
 @ti.func
 def get_cell(pos):
     return int(pos * cell_recpr)
-
-
 @ti.func
 def is_in_grid(c):
     # @c: Vector(i32)
     return 0 <= c[0] and c[0] < grid_size[0] and 0 <= c[1] and c[1] < grid_size[1]
-
-
 @ti.func
 def confine_position_to_boundary(p):
     bmin = particle_radius_in_world
@@ -128,8 +118,6 @@ def confine_position_to_boundary(p):
         elif bmax[i] <= p[i]:
             p[i] = bmax[i] - epsilon * ti.random()
     return p
-
-
 @ti.kernel
 def move_board():
     # probably more accurate to exert force on particles according to hooke's law.
@@ -141,8 +129,6 @@ def move_board():
         b[1] = 0
     b[0] += -ti.sin(b[1] * np.pi / period) * vel_strength * time_delta
     board_states[None] = b
-
-
 @ti.kernel
 def prologue():
     # save old positions
@@ -183,8 +169,6 @@ def prologue():
                         particle_neighbors[p_i, nb_i] = p_j
                         nb_i += 1
         particle_num_neighbors[p_i] = nb_i
-
-
 @ti.kernel
 def substep():
     # compute lambdas
@@ -233,8 +217,6 @@ def substep():
         # apply position deltas
     for i in positions:
         positions[i] += position_deltas[i]
-
-
 @ti.kernel
 def epilogue():
     # confine to boundary
@@ -245,15 +227,11 @@ def epilogue():
     for i in positions:
         velocities[i] = (positions[i] - old_positions[i]) / time_delta
         # no vorticity/xsph because we cannot do cross product in 2D...
-
-
 def run_pbf():
     prologue()
     for _ in range(pbf_num_iters):
         substep()
     epilogue()
-
-
 def render(gui):
     gui.clear(bg_color)
     pos_np = positions.to_numpy()
@@ -267,8 +245,6 @@ def render(gui):
         color=boundary_color,
     )
     gui.show()
-
-
 @ti.kernel
 def init_particles():
     for i in range(num_particles):
@@ -278,8 +254,6 @@ def init_particles():
         for c in ti.static(range(dim)):
             velocities[i][c] = (ti.random() - 0.5) * 4
     board_states[None] = ti.Vector([boundary[0] - epsilon, -0.0])
-
-
 def print_stats():
     print("PBF stats:")
     num = grid_num_particles.to_numpy()
@@ -288,8 +262,6 @@ def print_stats():
     num = particle_num_neighbors.to_numpy()
     avg, max_ = np.mean(num), np.max(num)
     print(f"  #neighbors per particle: avg={avg:.2f} max={max_}")
-
-
 def main():
     init_particles()
     print(f"boundary={boundary} grid={grid_size} cell_size={cell_size}")
@@ -300,7 +272,5 @@ def main():
         if gui.frame % 20 == 1:
             print_stats()
         render(gui)
-
-
 if __name__ == "__main__":
     main()

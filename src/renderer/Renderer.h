@@ -10,7 +10,6 @@ class Renderer: public QOpenGLWidget, protected QOpenGLFunctions{
 	Q_OBJECT
 private:
 	int screen_x = 800, screen_y = 600;
-	float screenToWorldRatio = 10.0;
 	Camera camera;
 public:
 protected:
