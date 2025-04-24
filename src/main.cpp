@@ -7,7 +7,7 @@
 int main(int argc, char *argv[]) {
 	QApplication app(argc, argv);
 	Logger::setLogFile("Log.txt");
-
+	LOG_INFO << "Program started.";
 	Renderer renderer;
 //	renderer.initializeGL();
 

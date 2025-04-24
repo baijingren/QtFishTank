@@ -54,3 +54,56 @@ compile_commands.json
 *_qmlcache.qrc
 
 build/
+
+# Jetbrains IDEs
+.idea/
+.gradle/
+.gradle/buildOutputCleanup/
+.gradle/checksums/
+.gradle/caches/
+.gradle/native/
+.gradle/wrapper/
+.gradle/build-cache-bin/
+.gradle/build
+.gradle
+
+# Visual Studio Code
+.vscode/
+.vscode-test/
+
+# Visual Studio
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.pdb
+*.aps
+*.pch
+*.obj
+*.exp
+*.lib
+*.sbr
+*.opensdf
+*.opensdf.vspx
+*.sdf
+*.sdf.vspx
+*.ruleset
+*.ruleset.xml
+*.sln.docstates
+*.vspx
+*.vspx_config
+*.sdf_config
+*.suo.vspx
+*.suo.vspx_config
+*.sdf.vspx_config
+*.userosscache
+*.userosscache.vspx
+*.userosscache.vspx_config
+*.sln.cache
+*.sln.docdata
+*.sln.lastclosed
+*.sln.lastopened
+*.sln.docdata.vspx
+*.sln.docdata.vspx_config
+*.sln.docstates.vspx
+*.sln.docstates
