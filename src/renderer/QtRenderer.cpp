@@ -41,7 +41,7 @@ QtRenderer::QtRenderer(QWidget *parent) {
 	// 创建定时器
 	simulationTimer = new QTimer(this);
 	connect(simulationTimer, &QTimer::timeout, this, &QtRenderer::updateSimulation);
-	simulationTimer->start(32); // 每 32ms 更新一次（约 30 FPS）
+	simulationTimer->start(16); // 每 16ms 更新一次（约 60 FPS）
 }
 
 void QtRenderer::updateSimulation() {
