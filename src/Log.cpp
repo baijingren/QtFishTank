@@ -9,6 +9,27 @@
 #include <mutex>
 #include <cstring>
 
+#include <glm/glm.hpp>
+
+// 单独支持vec3, ivec3, mat4三种类型的<<重载
+inline std::ostream& operator<<(std::ostream& os, const glm::vec3& v) {
+	os << "(" << v.x << ", " << v.y << ", " << v.z << ")";
+	return os;
+}
+inline std::ostream& operator<<(std::ostream& os, const glm::ivec3& v) {
+	os << "(" << v.x << ", " << v.y << ", " << v.z << ")";
+	return os;
+}
+inline std::ostream& operator<<(std::ostream& os, const glm::mat4& m) {
+	for (int i = 0; i < 4; ++i) {
+		for (int j = 0; j < 4; ++j) {
+			os << m[i][j] << " ";
+		}
+		os << std::endl;
+	}
+	return os;
+}
+
 class Logger {
 public:
 	enum class Level { INFO, WARNING, ERROR };

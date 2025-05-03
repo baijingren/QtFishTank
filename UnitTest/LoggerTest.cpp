@@ -1,7 +1,7 @@
 //
 // Created by baijingren on 25-4-3.
 //
-#include "Log.cpp"
+#include "../src/Log.cpp"
 #include <QtTest/QtTest>
 
 class LoggerTest : public QObject{

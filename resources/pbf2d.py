@@ -9,7 +9,7 @@ import taichi as ti
 
 ti.init(arch=ti.gpu)
 
-screen_res = (800, 400)
+screen_res = (800, 600)
 screen_to_world_ratio = 10.0
 boundary = (
     screen_res[0] / screen_to_world_ratio,
@@ -29,7 +29,7 @@ dim = 2
 bg_color = 0x112F41
 particle_color = 0x068587
 boundary_color = 0xEBACA2
-num_particles_x = 100
+num_particles_x = 20
 num_particles = num_particles_x * 50
 max_num_particles_per_cell = 100
 max_num_neighbors = 100

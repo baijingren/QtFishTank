@@ -11,7 +11,7 @@ import taichi as ti
 ti.init(arch=ti.gpu)
 
 screen_res = (600, 600)
-screen_to_world_ratio = 10.0
+screen_to_world_ratio = 20.0
 boundary = (screen_res[0] / screen_to_world_ratio,
             screen_res[1] / screen_to_world_ratio,
             screen_res[0] / screen_to_world_ratio,)

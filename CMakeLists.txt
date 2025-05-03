@@ -20,6 +20,11 @@ elseif(UNIX AND NOT APPLE)
     set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 endif()
 
+#  调试模式
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    add_definitions(-DDEBUG)
+endif()
+
 # 查找依赖
 find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets Network Test OpenGL OpenGLWidgets)
 find_package(OpenGL REQUIRED)
@@ -33,14 +38,16 @@ add_executable(QtFishTank
         src/core/MainWindow.cpp
         src/fluid/FluidSimulator.cpp
         src/input/UserInputHandler.cpp
-        src/renderer/Renderer.cpp
         src/objects/Ball.cpp
         src/objects/Fish.cpp
         src/fluid/Particle.cpp
         src/renderer/Camera.cpp
         src/renderer/Ray.cpp
-        src/renderer/screen.cpp
         src/Log.cpp
+        src/input/ShaderInput.cpp
+        src/input/ShaderInput.h
+        src/renderer/QtRenderer.cpp
+        src/renderer/QtRenderer.h
 )
 
 # 包含目录（使用现代CMake目标方式）
@@ -67,7 +74,15 @@ target_link_libraries(QtFishTank PRIVATE
 
 # 启用测试
 enable_testing()
-add_subdirectory(UnitTest)
+
+add_executable(CameraTest UnitTest/CameraTest.cpp src/renderer/Camera.cpp src/Log.cpp)
+add_executable(LoggerTest UnitTest/LoggerTest.cpp src/Log.cpp)
+
+target_link_libraries(CameraTest PRIVATE Qt6::Test glm::glm)
+target_link_libraries(LoggerTest PRIVATE Qt6::Test glm::glm)
+
+add_test(NAME CameraTest COMMAND CameraTest)
+add_test(NAME LoggerTest COMMAND LoggerTest)
 
 # 平台特定配置
 if(WIN32)

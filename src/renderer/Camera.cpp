@@ -4,6 +4,8 @@
 
 #include <cmath>
 #include <iostream>
+#include <glm/ext/matrix_clip_space.hpp>
+#include <glm/ext/matrix_transform.hpp>
 #include "Camera.h"
 
 Camera::Camera(glm::vec3 camPos, glm::vec3 cameraTarget, glm::vec3 cameraUp) {
@@ -30,6 +32,7 @@ void debug(glm::mat4 ret){
 }
 
 void Camera::setProjectionMatrix(float fov, float aspect, float near, float far) {
+	// TODO: 修复透视投影矩阵的计算方法
 	glm::mat4 ret;
 	// fov: 视野角度(角度制)
 	// aspect: 宽高比
@@ -44,7 +47,7 @@ void Camera::setProjectionMatrix(float fov, float aspect, float near, float far)
 	 * 5.压缩近平面，转化为透视投影矩阵
 	 */
 //	fov = fov / 180.0f * 3.14159265358979323846f;
-	float top = near * std::tan(fov / 2.0f) / 2; // 这里为什么必须除以2？
+	float top = near * std::tan(fov / 2.0f);
 	float right = top * aspect; // 利用宽高比计算top
 	ret = glm::mat4(1.0f); // 生成单位矩阵
 	ret = ret * glm::mat4(
@@ -66,9 +69,12 @@ void Camera::setProjectionMatrix(float fov, float aspect, float near, float far)
 			0.0f, 0.0f, 1.0f, 0.0f
 	}; // 压缩近平面，转化为透视投影矩阵
 //	debug(ret);
-	projectionMatrix = ret;
+//	projectionMatrix = ret;
+	glm::mat4 pro = glm::perspective(fov, aspect, near, far);
+	projectionMatrix = pro;
 }
 void Camera::setViewMatrix(glm::vec3 m_camPos, glm::vec3 m_cameraTarget, glm::vec3 m_cameraUp) { // 设置视图矩阵
+	// TODO: 修复视图矩阵的计算方法
 	camPos = m_camPos;
 	cameraTarget = m_cameraTarget;
 	cameraUp = m_cameraUp;
@@ -103,11 +109,13 @@ void Camera::setViewMatrix(glm::vec3 m_camPos, glm::vec3 m_cameraTarget, glm::ve
 //			0.0f, 0.0f, 0.0f, 1.0f,
 //			0.0f, 0.0f, 0.0f, 1.0f
 //	));
-	viewMatrix = ret;
+//	viewMatrix = ret;
+	glm::mat4 view = glm::lookAt(m_camPos, m_cameraTarget, m_cameraUp);
+	viewMatrix = view;
 }
 
 const glm::vec3 &Camera::getCamPos() const {
-
+	return camPos;
 }
 
 void Camera::setCamPos(const glm::vec3 &camPos) {

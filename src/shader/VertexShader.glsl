@@ -1,13 +1,14 @@
 #version 330
 
-vec3 position;
-in vec3 vertexPosition;
-in vec3 vertexNormal;
-in vec2 vertexUV;
-out vec3 fragmentPosition;
-out vec3 fragmentNormal;
-out vec2 fragmentUV;
+layout(location = 0) in vec3 position;
+layout(location = 1) in vec4 color;
+
+out vec4 v_color;
+
+uniform mat4 view;
+uniform mat4 projection;
 
 void main(){
-
+    gl_Position = projection * view * vec4(position, 1.0);
+    v_color = color;
 } 

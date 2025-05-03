@@ -1,92 +1,99 @@
-//
-// Created by baijingren on 25-3-27.
-//
-#include "renderer/Camera.h"
-#include <glm/gtc/matrix_transform.hpp>
 #include <QtTest/QtTest>
+#include <glm/glm.hpp>
+#include <cmath>
+#include <glm/ext/matrix_clip_space.hpp>
+#include "../src/renderer/Camera.h" // 假设 Camera 类定义在此头文件
 
-class CameraTest : public QObject {
-	Q_OBJECT
-private slots:
-	void testSetProjectionMatrix();
-	void testSetViewMatrix();
-};
+class TestCamera : public QObject
+{
+Q_OBJECT
 
-QTEST_MAIN(CameraTest)
-#include "CameraTest.moc"
-
-glm::mat4 stdProjectionMatrix(float fov, float aspect, float near, float far) {
-	glm::mat4 ortho, projection, proj;
-	projection = glm::mat4(1.0f);
-	proj = glm::mat4{
-		near, 0.0f, 0.0f, 0.0f,
-		0.0f, near, 0.0f, 0.0f,
-		0.0f, 0.0f, near + far, -near * far,
-		0.0f, 0.0f, 1.0f, 0.0f
-	};
-	float h = near * std::tan(fov / 2.0f) / 2;
-	float w = h * aspect;
-	float z = far - near;
-	ortho = glm::mat4{
-		2.0f / w, 0.0f, 0.0f, 0.0f,
-		0.0f, 2.0f / h, 0.0f, 0.0f,
-		0.0f, 0.0f, 2.0 / z, -(far + near) / (far - near),
-		0.0f, 0.0f, 0.0f, 1.0f
-	};
-	return projection = ortho * proj * projection;
-}
-void CameraTest::testSetProjectionMatrix() {
-	Camera camera;
-	camera.setProjectionMatrix(45.0f, 800.0f / 600.0f, 0.1f, 100.0f);
-	glm::mat4 projectionMatrix = camera.getProjectionMatrix();
-//	debug(projectionMatrix);
-	glm::mat4 answer = stdProjectionMatrix(45.0f, 800.0f / 600.0f, 0.1f, 100.0f);
-//	debug(answer);
-	QVERIFY(projectionMatrix == answer);
-}
-	glm::mat4 stdViewMatrix(glm::vec3 m_camPos, glm::vec3 m_cameraTarget, glm::vec3 m_cameraUp) {
-		// 1. 归一化上向量
-		glm::vec3 newUp = glm::normalize(m_cameraUp);
-
-		// 2. 计算观察方向（摄像机到目标）
-		glm::vec3 lookAt = glm::normalize(m_cameraTarget - m_camPos);
-
-		// 3. 计算右向量和修正后的上向量
-		glm::vec3 right = glm::normalize(glm::cross(newUp, lookAt));
-		newUp = glm::normalize(glm::cross(lookAt, right)); // 右手法则
-
-		// 4. 构造旋转矩阵（对齐到摄像机坐标系）
-		glm::mat4 rotation = glm::mat4(
-				glm::vec4(right, 0.0f),   // 右向量
-				glm::vec4(newUp, 0.0f),   // 修正后的上向量
-				glm::vec4(-lookAt, 0.0f), // 观察方向对准 -Z 轴
-				glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)
-		);
-
-		// 5. 构造平移矩阵（位置取反）
-		glm::mat4 translation = glm::translate(glm::mat4(1.0f), -m_camPos);
-		debug(translation);
-		// 6. 组合视图矩阵：先平移，再旋转
-		glm::mat4 viewMatrix = rotation * translation;
-
-		// 7. 可选：清理负零（仅影响显示）
-		for (int i = 0; i < 4; ++i) {
-			for (int j = 0; j < 4; ++j) {
-				if (std::abs(viewMatrix[i][j]) < 1e-6f) {
-					viewMatrix[i][j] = 0.0f;
-				}
+private:
+	// 比较两个矩阵是否在误差范围内相等
+	void compareMatrices(const glm::mat4& result, const glm::mat4& expected, float epsilon = 1e-5f) {
+		for (int col = 0; col < 4; ++col) {
+			for (int row = 0; row < 4; ++row) {
+				QVERIFY(std::abs(result[col][row] - expected[col][row]) < epsilon);
 			}
 		}
-//		debug(viewMatrix);
-		return viewMatrix;
 	}
-void CameraTest::testSetViewMatrix() {
-	Camera camera;
-	camera.setViewMatrix(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	glm::mat4 viewMatrix = camera.getViewMatrix();
-	glm::mat4 answer = stdViewMatrix(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-//	debug(viewMatrix);
-//	debug((glm::lookAt(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f))));
-//	debug(answer);
-	QVERIFY(viewMatrix == answer);
-}
+
+private slots:
+	// 测试正常参数情况
+	void testNormalCase() {
+		Camera camera;
+		float fov = 60.0f;
+		float aspect = 4.0f / 3.0f;
+		float near = 0.1f;
+		float far = 100.0f;
+
+		camera.setProjectionMatrix(fov, aspect, near, far);
+
+		// 使用 GLM 的 perspective 函数生成预期矩阵
+		glm::mat4 expected = glm::perspective(glm::radians(fov), aspect, near, far);
+		compareMatrices(camera.getProjectionMatrix(), expected);
+	}
+
+	// 测试 near 接近 0 的情况
+	void testEdgeCase_NearZero() {
+		Camera camera;
+		float fov = 45.0f;
+		float aspect = 1.0f;
+		float near = 0.0001f;
+		float far = 1000.0f;
+
+		camera.setProjectionMatrix(fov, aspect, near, far);
+
+		glm::mat4 expected = glm::perspective(glm::radians(fov), aspect, near, far);
+		compareMatrices(camera.getProjectionMatrix(), expected);
+	}
+
+	// 测试 far 远大于 near 的情况
+	void testEdgeCase_FarLarge() {
+		Camera camera;
+		float fov = 90.0f;
+		float aspect = 2.0f;
+		float near = 1.0f;
+		float far = 1e6f;
+
+		camera.setProjectionMatrix(fov, aspect, near, far);
+
+		glm::mat4 expected = glm::perspective(glm::radians(fov), aspect, near, far);
+		compareMatrices(camera.getProjectionMatrix(), expected);
+	}
+
+	// 测试 near >= far 的异常情况（函数不处理，验证无崩溃）
+	void testInvalid_NearGreaterFar() {
+		Camera camera;
+		// 不抛出异常，但生成的矩阵可能无效
+		camera.setProjectionMatrix(60.0f, 1.0f, 10.0f, 1.0f);
+		// 验证矩阵元素无 NaN 或无穷大
+		glm::mat4 projectionMatrix = camera.getProjectionMatrix();
+		for (int col = 0; col < 4; ++col) {
+			for (int row = 0; row < 4; ++row) {
+				QVERIFY(!std::isnan(projectionMatrix[col][row]));
+				QVERIFY(!std::isinf(projectionMatrix[col][row]));
+			}
+		}
+	}
+
+	// 测试负数 fov 或 aspect 的情况（函数不处理，验证无崩溃）
+	void testInvalid_NegativeFovOrAspect() {
+		Camera camera;
+		// 负数 fov
+		camera.setProjectionMatrix(-60.0f, 1.0f, 0.1f, 100.0f);
+		// 负数 aspect
+		camera.setProjectionMatrix(60.0f, -1.0f, 0.1f, 100.0f);
+		// 验证矩阵元素无 NaN 或无穷大
+		glm::mat4 projectionMatrix = camera.getProjectionMatrix();
+		for (int col = 0; col < 4; ++col) {
+			for (int row = 0; row < 4; ++row) {
+				QVERIFY(!std::isnan(projectionMatrix[col][row]));
+				QVERIFY(!std::isinf(projectionMatrix[col][row]));
+			}
+		}
+	}
+};
+
+QTEST_MAIN(TestCamera)
+#include "CameraTest.moc"

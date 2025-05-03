@@ -11,6 +11,7 @@
 class Particle {
 public:
 	Particle() = default;
+	Particle(glm::vec3 pos, glm::vec3 vel = glm::vec3(0.0f), float density = 1.0f, int _h = 100);
     glm::vec3 pos; // 粒子位置
     glm::vec3 vel; // 粒子速度
     float density; // 粒子密度（使用sph方法）
