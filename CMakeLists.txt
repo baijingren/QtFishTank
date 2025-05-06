@@ -48,6 +48,8 @@ add_executable(QtFishTank
         src/input/ShaderInput.h
         src/renderer/QtRenderer.cpp
         src/renderer/QtRenderer.h
+        src/renderer/Quat.cpp
+        src/renderer/Quat.h
 )
 
 # 包含目录（使用现代CMake目标方式）
