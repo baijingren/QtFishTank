@@ -33,7 +33,7 @@ D:\CODE\QTFISHTANK\SRC
 │      UserInputHandler.cpp
 │      UserInputHandler.h
 │
-├─objects
+├─objects (其他类型的物体，未实现)
 │      Ball.cpp
 │      Ball.h
 │      Fish.cpp
