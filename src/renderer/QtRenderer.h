@@ -7,6 +7,7 @@
 
 #include <QWidget>
 #include <QTimer>
+#include <QMouseEvent>
 #include <glm/glm.hpp>
 
 #include "Camera.h"
@@ -27,12 +28,20 @@ public:
 
 private:
 	Simulator simulator;
-	int particleNum = 4000;
+	int particleNum = 10000;
 	void init();
 	QTimer* simulationTimer;
 	void updateSimulation();
 
+protected:
+	void mousePressEvent(QMouseEvent *event) override;
+	void mouseReleaseEvent(QMouseEvent *event) override;
+	void mouseMoveEvent(QMouseEvent *event) override;
 
+private:
+	float mouseX, mouseY;
+	bool mouseLeftPressed = false;
+	bool mouseRightPressed = false;
 };
 
 

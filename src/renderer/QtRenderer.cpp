@@ -24,19 +24,12 @@ QtRenderer::QtRenderer(QWidget *parent) {
 	// 设置视图矩阵参数：相机位置(1,1,1)，目标点(0,0,0)，上方向(-1/sqrt(2),1,-1/sqrt(2))
 	camera.setViewMatrix(glm::vec3(1.0f, 1.0f, 1.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(-1/sqrt(2), 1.0f, -1/sqrt(2)));
 	 */
-	/*
-	// 创建一个默认的相机配置
 	camera = Camera();
+	camera.setCamPos(glm::vec3(50.0f, 10.0f, 50.0f));
 	camera.setCameraTarget(glm::vec3(0.0f, 0.0f, 0.0f));
 	camera.setCameraUp(glm::vec3(0.0f, 1.0f, 0.0f));
 	camera.setProjectionMatrix(80.0f, 800.0f / 600.0f, 0.1f, 100.0f);
-	camera.setViewMatrix(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	 */
-	camera = Camera();
-	camera.setCameraTarget(glm::vec3(0.0f, 0.0f, 0.0f));
-	camera.setCameraUp(glm::vec3(-1.0f, -10.0f, -1.0f));
-	camera.setProjectionMatrix(80.0f, 800.0f / 600.0f, 0.1f, 100.0f);
-	camera.setViewMatrix(glm::vec3(50.0f, 10.0f, 50.0f), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(-1.0f, -10.0f, -1.0f));
+	camera.setViewMatrix();
 	init();
 	// 创建定时器
 	simulationTimer = new QTimer(this);
@@ -138,5 +131,37 @@ void QtRenderer::paintEvent(QPaintEvent *event) {
 //		painter.drawPoint(pos);
 		// 或者绘制为圆形
 		 painter.drawEllipse(pos, 3, 3);
+	}
+}
+
+void QtRenderer::mousePressEvent(QMouseEvent *event) {
+	if (event->button() == Qt::LeftButton) {
+		// 记录鼠标按下时的位置
+		auto mousePressPos = event->pos();
+		mouseX = mousePressPos.x();
+		mouseY = mousePressPos.y();
+		mouseLeftPressed = true;
+	}
+	if (event->button() == Qt::RightButton) {
+		// 记录鼠标按下时的位置
+		auto mousePressPos = event->pos();
+		mouseX = mousePressPos.x();
+		mouseY = mousePressPos.y();
+		mouseRightPressed = true;
+	}
+}
+void QtRenderer::mouseReleaseEvent(QMouseEvent *event) {
+	if (event->button() == Qt::LeftButton) {
+		mouseLeftPressed = false;
+	}
+	if (event->button() == Qt::RightButton) {
+		mouseRightPressed = false;
+	}
+}
+void QtRenderer::mouseMoveEvent(QMouseEvent *event) {
+	QPoint mousePos = event->pos();
+	QPoint delta = mousePos - QPoint(mouseX, mouseY);
+	if(mouseLeftPressed){
+		
 	}
 }

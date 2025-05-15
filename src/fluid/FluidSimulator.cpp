@@ -92,9 +92,9 @@ void Simulator::init(int particleNums) {
 	std::mt19937 gen(rd());
 	std::uniform_real_distribution<float> dis(-0.25f, 0.25f); // 创建一个随机数生成器, 范围在-0.25到0.25之间
 	LOG_INFO << "FluidSimulator init";
-	glm::vec3 initPos = glm::vec3(10.0f, 10.0f, 10.0f);
+	glm::vec3 initPos = glm::vec3(10.0f, 2.0f, 10.0f);
 	LOG_INFO << "boundary = " << boundary << ", grid = " << gridSize << ", cellSize = " << cellSize << ". ";
-	float CubeSize = 10.0f;
+	float CubeSize = std::ceil(pow(particleNums, 1.0f / 3.0f));
 	float spacing = 1.0f;
 	int numPerRow = (int)(CubeSize / spacing) + 1;
 	int numPerFloor = numPerRow * numPerRow;
@@ -110,19 +110,19 @@ void Simulator::init(int particleNums) {
 	LOG_INFO << "Init particle nums is " << particleNums << ". " << "Finished init.";
 }
 void Simulator::runPBF() {
-//#ifdef DEBUG
-//	LOG_INFO << "Init PBF";
-//#endif
+#ifdef DEBUG
+	LOG_INFO << "Init PBF";
+#endif
 	prologue();
 	for(int i = 1; i <= pbfNumIters; i++){
-//#ifdef DEBUG
-//		LOG_INFO << "Run PBF in " << i << " iterations.";
-//#endif
+#ifdef DEBUG
+		LOG_INFO << "Run PBF in " << i << " iterations.";
+#endif
 		update();
 	}
-//#ifdef DEBUG
-//	LOG_INFO << "Finished PBF.";
-//#endif
+#ifdef DEBUG
+	LOG_INFO << "Finished PBF.";
+#endif
 	epilogue();
 }
 void Simulator::prologue() {
@@ -202,48 +202,44 @@ void Simulator::update() {    // 在这里不写 while-loop，因为渲染不在
 			float r = glm::length(s);
 			float h = 1.1f; // 初始化核半径
 			float poly6 = poly6Value(r, h); // 计算核函数
-//			float poly6Grad = -945.0f / (32.0f * M_PI * pow(h, 9)) * pow(h * h - r * r, 2) * 2.0f * r; // 计算核函数的梯度
-//			glm::vec3 grad = poly6Grad * s / r; // 计算梯度
 			glm::vec3 grad = spikyGradient(s, h);
 			grad_i += grad; // 累加梯度
-//#ifdef DEBUG
-//			LOG_INFO << "grad_i is " << grad_i;
-//#endif
+#ifdef DEBUG
+			LOG_INFO << "grad_i is " << grad_i;
+#endif
 			densityConstraint += poly6; // 累加密度约束
 			sumSqrGrad += glm::dot(grad, grad); // 累加梯度平方和
-//#ifdef DEBUG
-//			if(std::isnan(grad_i.x)){
-//				LOG_ERROR << "Unexpected nan. ";
-//				LOG_ERROR << "grad_i is " << grad_i << ". And pos_i is " << pos_i << ". And pos_j is " << pos_j << ". And s is " << s << ". And r is " << r << ". And h is " << h << ". ";
-//				LOG_ERROR << "grad is " << grad << ". And poly6 is " << poly6 << ". And sumSqrGrad is " << sumSqrGrad << ". ";
-//				exit(1);
-//			}
-//			if(grad_i == glm::vec3(0.0f)){
-//				LOG_WARNING << "grad_i is zero.";
-//				LOG_INFO << "p neighbour number is " << p.neighbour.size() << ". ";
-//				LOG_INFO << "grad_j is " <<  grad << ". S is " << s << ". And r is " << r << ". And h is " << h << ". ";
-//			}
-//#endif
+#ifdef DEBUG
+			if(std::isnan(grad_i.x)){
+				LOG_ERROR << "Unexpected nan. ";
+				LOG_ERROR << "grad_i is " << grad_i << ". And pos_i is " << pos_i << ". And pos_j is " << pos_j << ". And s is " << s << ". And r is " << r << ". And h is " << h << ". ";
+				LOG_ERROR << "grad is " << grad << ". And poly6 is " << poly6 << ". And sumSqrGrad is " << sumSqrGrad << ". ";
+				exit(1);
+			}
+			if(grad_i == glm::vec3(0.0f)){
+				LOG_WARNING << "grad_i is zero.";
+				LOG_INFO << "p neighbour number is " << p.neighbour.size() << ". ";
+				LOG_INFO << "grad_j is " <<  grad << ". S is " << s << ". And r is " << r << ". And h is " << h << ". ";
+			}
+#endif
 		}
 		p.density = ((mass * densityConstraint / rho) - 1.0f); // 更新粒子密度
-//		glm::vec3 grad_iNorm = glm::normalize(grad_i); // 归一化梯度
-//		sumSqrGrad += glm::dot(grad_iNorm, grad_iNorm); // 计算梯度平方和
 		sumSqrGrad += glm::dot(grad_i, grad_i);
 		p.lambda = (-1.0f * p.density) / (sumSqrGrad + lambdaEpsilon); // 计算拉格朗日乘子
-//#ifdef DEBUG
-//		if(std::isnan(sumSqrGrad)){
-//			LOG_ERROR << "Unexpected nan. ";
-//			LOG_ERROR << "grad_i is " << grad_i << ". ";
-//			LOG_ERROR << "sumSqrGrad is nan.";
-//			exit(1);
-//		}
-//		if(std::isnan(p.lambda)){
-//			LOG_ERROR << "Unexpected nan. ";
-//			LOG_ERROR << "mass is  " << mass << ". And density is " << p.density << ". And rho is " << rho << ". And lambdaEpsilon is " << lambdaEpsilon << ". ";
-//			LOG_ERROR << "sumSqrGrad is " << sumSqrGrad << ". ";
-//			exit(1);
-//		}
-//#endif
+#ifdef DEBUG
+		if(std::isnan(sumSqrGrad)){
+			LOG_ERROR << "Unexpected nan. ";
+			LOG_ERROR << "grad_i is " << grad_i << ". ";
+			LOG_ERROR << "sumSqrGrad is nan.";
+			exit(1);
+		}
+		if(std::isnan(p.lambda)){
+			LOG_ERROR << "Unexpected nan. ";
+			LOG_ERROR << "mass is  " << mass << ". And density is " << p.density << ". And rho is " << rho << ". And lambdaEpsilon is " << lambdaEpsilon << ". ";
+			LOG_ERROR << "sumSqrGrad is " << sumSqrGrad << ". ";
+			exit(1);
+		}
+#endif
 	}
 	// 计算粒子位置增量
 	for(auto& p: particles){
@@ -257,34 +253,34 @@ void Simulator::update() {    // 在这里不写 while-loop，因为渲染不在
 			glm::vec3 pos_j = q->pos;
 			// 粒子压力矫正因子
 			float scorr_ij = computeScorr(pos_i, pos_j);
-//#ifdef DEBUG
-//			LOG_INFO << "lambda_j is " << lambda_i << ". And lambda_j is " << lambda_j << ". And scorr_ij is " << scorr_ij << ".";
-//			LOG_INFO << "difference of posDelta is " << (lambda_i + lambda_j) * scorr_ij << ". ";
-//			if(std::isnan((lambda_i + lambda_j) * scorr_ij)){
-//				LOG_ERROR << "Unexpected nan. ";
-//				exit(1);
-//			}
-//#endif
+#ifdef DEBUG
+			LOG_INFO << "lambda_j is " << lambda_i << ". And lambda_j is " << lambda_j << ". And scorr_ij is " << scorr_ij << ".";
+			LOG_INFO << "difference of posDelta is " << (lambda_i + lambda_j) * scorr_ij << ". ";
+			if(std::isnan((lambda_i + lambda_j) * scorr_ij)){
+				LOG_ERROR << "Unexpected nan. ";
+				exit(1);
+			}
+#endif
 			posDelta += (lambda_i + lambda_j + scorr_ij) * spikyGradient(pos_i - pos_j, h); // 计算位置增量
 		}
-//#ifdef DEBUG
-//		if(posDelta.x - 0.0f < 1e-6){
-//			LOG_ERROR << "posDelta is zero.";
-//		}
-//#endif
+#ifdef DEBUG
+		if(posDelta.x - 0.0f < 1e-6){
+			LOG_ERROR << "posDelta is zero.";
+		}
+#endif
 		posDelta /= rho; // 平均位置增量, 除以水的密度
-//#ifdef DEBUG
-//		LOG_WARNING << "posDelta is " << posDelta << ". " << "Finished update.";
-//		if(std::isnan(posDelta.x)){
-//			LOG_ERROR << "posDelta is nan.";
-//			LOG_INFO << "p.pos is " << p.pos << ". And p.oldPos is " << p.oldPos << ".";
-//			LOG_INFO << "p.neighbour is " << p.neighbour.size() << ". And p.density is " << p.density << ".";
-//			LOG_INFO << "p.lambda is " << p.lambda << ". And lambda_i is " << lambda_i << ".";
-//
-//
-//			exit(1);
-//		}
-//#endif
+#ifdef DEBUG
+		LOG_WARNING << "posDelta is " << posDelta << ". " << "Finished update.";
+		if(std::isnan(posDelta.x)){
+			LOG_ERROR << "posDelta is nan.";
+			LOG_INFO << "p.pos is " << p.pos << ". And p.oldPos is " << p.oldPos << ".";
+			LOG_INFO << "p.neighbour is " << p.neighbour.size() << ". And p.density is " << p.density << ".";
+			LOG_INFO << "p.lambda is " << p.lambda << ". And lambda_i is " << lambda_i << ".";
+
+
+			exit(1);
+		}
+#endif
 		p.pos += posDelta; // 更新粒子位置
 	}
 }

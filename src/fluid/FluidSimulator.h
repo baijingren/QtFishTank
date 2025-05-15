@@ -55,7 +55,7 @@ private:
 	int maxParticlePerCell = 100;
 
 	// ----------- 粒子参数 ----------
-    float dt = 0.05; // 更新时间间隔
+    float dt = 0.05f; // 更新时间间隔
 	float particleRadius = 3.0, particleRadiusInWorld = particleRadius / screenToWorldRatio; // 粒子半径，默认3.0，单位：世界坐标单位
     std::vector<Particle> particles; // 粒子对象
 	std::vector<glm::vec3> particlePos;
@@ -70,14 +70,14 @@ private:
 	int pbfNumIters = 5; // PBF迭代次数，默认5次
 	float h = 1.1; // 粒子核函数的半径，确定粒子相互作用的范围，默认1.1，单位：世界坐标单位
 	float mass = 1.0, rho = 1.0; // 粒子质量，默认1.0，单位：世界坐标单位, 粒子静止密度，默认1.0(水)，单位：世界坐标单位
-	float lambdaEpsilon = 300.0; // 求解拉格朗日乘子的参数，防止求解零矩阵，默认100.0
+	float lambdaEpsilon = 100.0; // 求解拉格朗日乘子的参数，防止求解零矩阵，默认100.0
 	/* 以下是XSPH对PBF的修正
 	 * XSPH基本思想：
 	 *  让粒子倾向于向周围粒子的平均位置移动
 	 *  通过添加一个与邻居粒子位置差相关的修正项，抑制非物理运动。
 	 *
 	 */
-	float corrDeltaQCooff = 0.3, corrK = 0.001; // XSPH参数，默认0.3, 0.001
+	float corrDeltaQCooff = 0.3f, corrK = 0.001; // XSPH参数，默认0.3, 0.001
 
 	bool isInRange(const glm::ivec3 &cell);
 };

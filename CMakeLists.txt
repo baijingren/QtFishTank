@@ -79,12 +79,15 @@ enable_testing()
 
 add_executable(CameraTest UnitTest/CameraTest.cpp src/renderer/Camera.cpp src/Log.cpp)
 add_executable(LoggerTest UnitTest/LoggerTest.cpp src/Log.cpp)
+add_executable(TestCameraSetViewMatrix UnitTest/TestCameraSetViewMatrix.cpp src/renderer/Camera.cpp src/Log.cpp)
 
 target_link_libraries(CameraTest PRIVATE Qt6::Test glm::glm)
 target_link_libraries(LoggerTest PRIVATE Qt6::Test glm::glm)
+target_link_libraries(TestCameraSetViewMatrix PRIVATE Qt6::Test glm::glm)
 
 add_test(NAME CameraTest COMMAND CameraTest)
 add_test(NAME LoggerTest COMMAND LoggerTest)
+add_test(NAME TestCameraSetViewMatrix COMMAND TestCameraSetViewMatrix)
 
 # 平台特定配置
 if(WIN32)

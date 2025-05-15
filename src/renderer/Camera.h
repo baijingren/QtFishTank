@@ -20,6 +20,7 @@ public:
 	glm::mat4 getViewMatrix();
 	glm::mat4 getProjectionMatrix();
 	void setProjectionMatrix(float fov, float aspect, float near, float far); // 透视投影
+	void setViewMatrix();
 	void setViewMatrix(glm::vec3 m_camPos, glm::vec3 m_cameraTarget, glm::vec3 m_cameraUp); // 设置视图矩阵
 	const glm::vec3 &getCamPos() const;
 

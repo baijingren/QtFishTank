@@ -6,7 +6,7 @@ public:
 	UserInputHandler() = default;
 	~UserInputHandler() = default;
 
-	void MouseDrag(int x, int y);
+	
 };
 
 #endif
